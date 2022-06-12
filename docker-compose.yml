@@ -1,0 +1,22 @@
+# specific version of docker compose, incase newer version is released causing breaking changes
+version: "3.9"
+
+services:
+  # name of service
+  app:
+    # build dockerfile inside current directory
+    build:
+      context: .
+      args:
+        - DEV=true
+    # map port 8000 on local to port 8000 inside docker container
+    ports:
+      - "8000:8000"
+    # map app directory from local to docker container
+    # to pretend rebuilding image when making changes to app in local
+    # this will sync the changes in app directory inside local system to the app directory inside container
+    volumes:
+      - ./app:/app
+    # command used to run this service
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
