@@ -21,6 +21,10 @@ ARG DEV=false
 RUN python -m venv /py && \
     # upgrade pip version inside venv
     /py/bin/pip install --upgrade pip && \
+    # need to add dependencies for alpine image to connect to postgresql
+    apk add --update --no-cache postgresql-client && \
+    apk add --update --no-cache --virtual .tmp-build-deps \
+        build-base postgresql-dev musl-dev && \
     # install dependencies from the requirements file inside venv
     /py/bin/pip install -r /tmp/requirements.txt && \
     # basic shell command, install requirements.dev.txt when DEV is false, and will be false when we run dev server
@@ -29,6 +33,8 @@ RUN python -m venv /py && \
     fi && \
     # can remove the /tmp file after dependencies are installed
     rm -rf /tmp && \
+    # can remove the extra dependencies added
+    apk del .tmp-build-deps && \
     # access the server system with another user instead of the root user
     # limits our user to certain privileges instead in case of system compromise
     adduser \
