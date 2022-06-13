@@ -38,7 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # user defined apps
     'core',
+    'rest_framework',
+    'drf_spectacular',
+    'user',
 ]
 
 MIDDLEWARE = [
@@ -128,3 +133,11 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# tell django to use the custom User model for authentication
+AUTH_USER_MODEL = 'core.User'
+
+# use openAPI to generate our schemas
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
